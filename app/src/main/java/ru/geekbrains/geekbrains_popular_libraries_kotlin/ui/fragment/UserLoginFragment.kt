@@ -37,12 +37,12 @@ class UserLoginFragment : MvpAppCompatFragment(), UserLoginView, BackClickListen
         userLoginBinding?.userLogin?.text = login
     }
 
-    fun getGithubUser() : GithubUser? {
+    private fun getGithubUser() : GithubUser? {
         return arguments?.getParcelable<GithubUser>(EXTRA_KEY)
     }
 
     companion object {
-        private val EXTRA_KEY = "UserLoginFragment.GithubUser"
+        private const val EXTRA_KEY = "UserLoginFragment.GithubUser"
 
         fun newInstance(githubUser: GithubUser) : UserLoginFragment {
             val bundle = Bundle()
