@@ -1,14 +1,19 @@
 package ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter
 
-import ru.geekbrains.geekbrains_popular_libraries_kotlin.R
-import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.CountersModel
+import com.github.terrakok.cicerone.Router
+import moxy.MvpPresenter
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.navigation.IScreens
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.MainView
 
-class MainPresenter(val mainView: MainView) {
-    val model = CountersModel()
+class MainPresenter(val router: Router, val screens: IScreens) : MvpPresenter<MainView>() {
 
-    fun counterClick(id: Int) {
-        val nextValue = model.next(id)
-        mainView.setButtonText(id, nextValue.toString())
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        router.replaceScreen(screens.users())
     }
+
+    fun backClicked() {
+        router.exit()
+    }
+
 }
