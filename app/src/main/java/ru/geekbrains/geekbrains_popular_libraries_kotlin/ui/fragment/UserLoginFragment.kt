@@ -17,7 +17,8 @@ class UserLoginFragment : MvpAppCompatFragment(), UserLoginView, BackClickListen
     private var userLoginBinding : FragmentUserLoginBinding ?= null
 
     private val presenter by moxyPresenter {
-        UserLoginPresenter(getGithubUser(), App.instance.router)
+        val githubUser = arguments?.getParcelable<GithubUser>(EXTRA_KEY) as GithubUser
+        UserLoginPresenter(githubUser, App.instance.router)
     }
 
     override fun onCreateView(
@@ -35,10 +36,6 @@ class UserLoginFragment : MvpAppCompatFragment(), UserLoginView, BackClickListen
 
     override fun setupUserLogin(login: String) {
         userLoginBinding?.userLogin?.text = login
-    }
-
-    private fun getGithubUser() : GithubUser? {
-        return arguments?.getParcelable<GithubUser>(EXTRA_KEY)
     }
 
     companion object {
