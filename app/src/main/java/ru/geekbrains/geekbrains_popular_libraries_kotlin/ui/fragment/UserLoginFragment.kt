@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.databinding.FragmentUserLoginBinding
-import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.GithubUsersRepo
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUser
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.UserLoginPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UserLoginView

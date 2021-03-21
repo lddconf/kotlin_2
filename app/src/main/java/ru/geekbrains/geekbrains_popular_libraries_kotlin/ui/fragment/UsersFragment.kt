@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.databinding.FragmentUsersBinding
@@ -22,7 +23,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackClickListener {
     }
 
     private val presenter by moxyPresenter {
-        UsersPresenter(GithubUsersRepo(), App.instance.router, AndroidScreens())
+        UsersPresenter(GithubUsersRepo(), App.instance.router, AndroidScreens(), AndroidSchedulers.mainThread())
     }
 
     private var vb: FragmentUsersBinding? = null
