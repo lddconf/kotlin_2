@@ -13,8 +13,7 @@ class GithubUsersRepo {
         GithubUser("login5")
     )
 
-    fun getUsers() = Observable.create<List<GithubUser>> { emitter->
-        emitter.onNext(users)
-        emitter.onComplete()
+    fun getUsers() = Observable.fromCallable {
+        return@fromCallable users
     }.subscribeOn(Schedulers.io())
 }
