@@ -45,6 +45,8 @@ class UsersPresenter(
     }
 
     fun loadData() {
+        //оператор switchMap, в отличии от оператора flatMap,
+        //обрабатывает (и передает результат дальше по цепочке) только последний элемент из последовательности, поступившей на вход.
         usersRepo.getUsers().observeOn(uiSchelduer)
             .subscribe({ users ->
                 usersListPresenter.users.clear()
