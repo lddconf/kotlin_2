@@ -13,7 +13,7 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.App
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.BackClickListener
 
 class UserLoginFragment : MvpAppCompatFragment(), UserLoginView, BackClickListener {
-    private var userLoginBinding : FragmentUserLoginBinding ?= null
+    private var userLoginBinding: FragmentUserLoginBinding? = null
 
     private val presenter by moxyPresenter {
         val githubUser = arguments?.getParcelable<GithubUser>(EXTRA_KEY) as GithubUser
@@ -21,9 +21,9 @@ class UserLoginFragment : MvpAppCompatFragment(), UserLoginView, BackClickListen
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = FragmentUserLoginBinding.inflate(inflater, container, false).also {
         userLoginBinding = it
     }.root
@@ -40,7 +40,7 @@ class UserLoginFragment : MvpAppCompatFragment(), UserLoginView, BackClickListen
     companion object {
         private const val EXTRA_KEY = "UserLoginFragment.GithubUser"
 
-        fun newInstance(githubUser: GithubUser) : UserLoginFragment {
+        fun newInstance(githubUser: GithubUser): UserLoginFragment {
             val bundle = Bundle()
             bundle.putParcelable(EXTRA_KEY, githubUser)
             val userLoginFragment = UserLoginFragment()
