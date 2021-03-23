@@ -6,4 +6,6 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.Github
 interface IScreens {
     fun users(): Screen
     fun userLogin(githubUser: GithubUser) : Screen
+
+    fun converter() : Screen
 }
