@@ -3,6 +3,7 @@ package ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter
 import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import moxy.MvpPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.GithubUsersRepo
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUser
@@ -12,12 +13,12 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UsersView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.IUserItemView
 
 class UsersPresenter(
-    val usersRepo: GithubUsersRepo,
-    val router: Router,
-    val screens: IScreens,
-    val uiSchelduer: Scheduler
+        val usersRepo: GithubUsersRepo,
+        val router: Router,
+        val screens: IScreens,
+        val uiSchelduer: Scheduler
 ) :
-    MvpPresenter<UsersView>() {
+        MvpPresenter<UsersView>() {
 
     class UsersListPresenter : IUsersListPresenter {
         val users = mutableListOf<GithubUser>()
@@ -30,6 +31,8 @@ class UsersPresenter(
 
         override fun getCount() = users.size
     }
+
+    val compositDisposable = CompositeDisposable()
 
     val usersListPresenter = UsersListPresenter()
 
@@ -48,18 +51,23 @@ class UsersPresenter(
         //оператор switchMap, в отличии от оператора flatMap,
         //обрабатывает (и передает результат дальше по цепочке) только последний элемент из последовательности, поступившей на вход.
         usersRepo.getUsers().observeOn(uiSchelduer)
-            .subscribe({ users ->
-                usersListPresenter.users.clear()
-                usersListPresenter.users.addAll(users)
-                viewState.updateList()
-            },
-                { error ->
-                    //Handle Error
-                })
+                .subscribe({ users ->
+                    usersListPresenter.users.clear()
+                    usersListPresenter.users.addAll(users)
+                    viewState.updateList()
+                },
+                        { error ->
+                            //Handle Error
+                        })
     }
 
     fun backClick(): Boolean {
         router.exit()
         return true
+    }
+
+    override fun onDestroy() {
+        compositDisposable.dispose()
+        super.onDestroy()
     }
 }
