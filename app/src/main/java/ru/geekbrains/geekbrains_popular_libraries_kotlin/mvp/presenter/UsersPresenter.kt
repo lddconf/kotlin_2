@@ -3,6 +3,7 @@ package ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter
 import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import moxy.MvpPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.GithubUsersRepo
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUser
@@ -32,6 +33,7 @@ class UsersPresenter(
     }
 
     val usersListPresenter = UsersListPresenter()
+    val compsitDispose = CompositeDisposable()
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -47,7 +49,7 @@ class UsersPresenter(
     fun loadData() {
         //оператор switchMap, в отличии от оператора flatMap,
         //обрабатывает (и передает результат дальше по цепочке) только последний элемент из последовательности, поступившей на вход.
-        usersRepo.getUsers().observeOn(uiSchelduer)
+        val disposable = usersRepo.getUsers().observeOn(uiSchelduer)
             .subscribe({ users ->
                 usersListPresenter.users.clear()
                 usersListPresenter.users.addAll(users)
@@ -56,9 +58,11 @@ class UsersPresenter(
                 { error ->
                     //Handle Error
                 })
+        compsitDispose.add(disposable)
     }
 
     fun backClick(): Boolean {
+        compsitDispose.dispose()
         router.exit()
         return true
     }
