@@ -1,5 +1,7 @@
 package ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model
 
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUser
 
 class GithubUsersRepo {
@@ -11,7 +13,7 @@ class GithubUsersRepo {
         GithubUser("login5")
     )
 
-    fun getUsers(): List<GithubUser> {
-        return users
-    }
+    fun getUsers() = Observable.fromCallable {
+        return@fromCallable users
+    }.subscribeOn(Schedulers.io())
 }
