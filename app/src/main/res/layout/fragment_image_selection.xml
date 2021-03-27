@@ -9,7 +9,7 @@
     <Button
         android:id="@+id/cnvBtn"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="45dp"
         android:text="@string/convert"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,7 +19,7 @@
     <TextView
         android:id="@+id/path_view"
         android:layout_width="180dp"
-        android:layout_height="35dp"
+        android:layout_height="45dp"
         android:text="@string/path"
         app:layout_constraintBottom_toTopOf="@+id/cnvBtn"
         app:layout_constraintEnd_toStartOf="@+id/selectBtn"
@@ -31,7 +31,7 @@
     <Button
         android:id="@+id/selectBtn"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="45dp"
         android:text="@string/select"
         app:layout_constraintBottom_toTopOf="@+id/cnvBtn"
         app:layout_constraintEnd_toEndOf="parent"

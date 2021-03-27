@@ -1,28 +1,36 @@
 package ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.fragment
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
-import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.databinding.FragmentImageSelectionBinding
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.converter.Simple2PNGConverter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.ImageSelectionPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.ImageSelectionView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.App
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.BackClickListener
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.utils.getBitmap
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.utils.getImage
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.utils.getPath
 
 
 class ImageSelectionFragment : MvpAppCompatFragment(), ImageSelectionView, BackClickListener {
     private var imageSelectionBinding: FragmentImageSelectionBinding? = null
 
     private val presenter by moxyPresenter {
-        ImageSelectionPresenter(App.instance.router, AndroidSchedulers.mainThread())
+        ImageSelectionPresenter(App.instance.router, AndroidSchedulers.mainThread(), Simple2PNGConverter(requireContext()))
     }
 
     override fun onCreateView(
@@ -55,6 +63,7 @@ class ImageSelectionFragment : MvpAppCompatFragment(), ImageSelectionView, BackC
 
     companion object {
         fun newInstance() = ImageSelectionFragment()
+        private const val PICK_IMAGE_REQUEST_CODE = 123.toInt()
     }
 
     override fun disableConvertBtn(disable: Boolean) {
@@ -69,36 +78,24 @@ class ImageSelectionFragment : MvpAppCompatFragment(), ImageSelectionView, BackC
         val intent = Intent()
             .setType("image/jpeg")
             .setAction(Intent.ACTION_GET_CONTENT)
-        startActivityForResult(Intent.createChooser(intent, "Select a jpeg"), 123)
+        startActivityForResult(
+            Intent.createChooser(intent, "Select a jpeg"),
+            PICK_IMAGE_REQUEST_CODE
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 123 && resultCode == RESULT_OK) {
-            val selectedfile: Uri? = data?.data //The uri with the location of the file
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
 
-
-            selectedfile?.let { file ->
-                file.let {
-                    presenter.onNewJPEGFileSelected(getPath(file) ?: "")
-                }
+            data?.data?.let { selectedImage ->
+                val image = getImage(requireContext(), selectedImage )
+                presenter.onNewJPEGFileSelected(image)
             }
+
         }
     }
 
-    private fun getPath(uri: Uri): String {
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor: Cursor = requireContext().applicationContext.contentResolver.query(
-            uri,
-            projection,
-            null,
-            null,
-            null
-        ) ?: return ""
-        val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        cursor.moveToFirst()
-        val s: String = cursor.getString(column_index)
-        cursor.close()
-        return s
-    }
+
+
 }
