@@ -2,12 +2,14 @@ package ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.databinding.ItemUserBinding
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.image.IImageLoader
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list.IUsersListPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.IUserItemView
 
-class UsersRVAdapter(val presenter: IUsersListPresenter) :
+class UsersRVAdapter(val presenter: IUsersListPresenter, val imageLoader: IImageLoader<ImageView>  ) :
     RecyclerView.Adapter<UsersRVAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -34,5 +36,8 @@ class UsersRVAdapter(val presenter: IUsersListPresenter) :
             tvLogin.text = text
         }
 
+        override fun loadAvatarUrl(url: String) = with(vb){
+            imageLoader.load(url, tvAvatar)
+        }
     }
 }
