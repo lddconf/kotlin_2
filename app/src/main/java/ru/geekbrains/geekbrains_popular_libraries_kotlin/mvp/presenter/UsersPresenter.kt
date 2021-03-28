@@ -1,10 +1,9 @@
 package ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter
 
 import com.github.terrakok.cicerone.Router
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
-import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.GithubUsersRepo
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.repo.IGithubUsersRepo
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUser
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.navigation.IScreens
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list.IUsersListPresenter
@@ -12,7 +11,7 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UsersView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.IUserItemView
 
 class UsersPresenter(
-    val usersRepo: GithubUsersRepo,
+    val usersRepo: IGithubUsersRepo,
     val router: Router,
     val screens: IScreens,
     val uiSchelduer: Scheduler
@@ -54,6 +53,7 @@ class UsersPresenter(
                 viewState.updateList()
             },
                 { error ->
+                    viewState.showError("Error: ${error.message}")
                     //Handle Error
                 })
     }
