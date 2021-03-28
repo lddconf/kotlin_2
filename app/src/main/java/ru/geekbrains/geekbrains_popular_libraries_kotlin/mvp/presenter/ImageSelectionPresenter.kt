@@ -54,7 +54,7 @@ class ImageSelectionPresenter(private val router: Router, val uiSchelduer: Sched
                         },
                         { error ->
                             //Handle error
-                            error.printStackTrace()
+                            viewState.showError("Error occurred: ${error.message}")
                             viewState.disableConvertBtn(false)
                         }
                     )

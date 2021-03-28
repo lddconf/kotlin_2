@@ -15,4 +15,6 @@ interface ImageSelectionView : MvpView {
     @Skip
     fun performJPEGFileSearch()
 
+    @AddToEndSingle
+    fun showError(message : String)
 }
