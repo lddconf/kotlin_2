@@ -9,6 +9,8 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.navigation.IScreens
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list.IUsersListPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UsersView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.IUserItemView
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.adapter.UserReposRVAdapter
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.adapter.UsersRVAdapter
 
 class UsersPresenter(
     val usersRepo: IGithubUsersRepo,
@@ -22,7 +24,7 @@ class UsersPresenter(
         val users = mutableListOf<GithubUser>()
         override var itemClickListener: ((IUserItemView) -> Unit)? = null
 
-        override fun bindView(view: IUserItemView) {
+        override fun bindView(view: UsersRVAdapter.ViewHolder) {
             val user = users[view.pos]
             view.setLogin(user.login)
             view.loadAvatarUrl(user.avatarUrl)
@@ -40,13 +42,11 @@ class UsersPresenter(
 
         usersListPresenter.itemClickListener = { view ->
             val user = usersListPresenter.users[view.pos]
-            router.navigateTo(screens.userLogin(user))
+            router.navigateTo(screens.userRepos(user))
         }
     }
 
     fun loadData() {
-        //оператор switchMap, в отличии от оператора flatMap,
-        //обрабатывает (и передает результат дальше по цепочке) только последний элемент из последовательности, поступившей на вход.
         usersRepo.getUsers().observeOn(uiSchelduer)
             .subscribe({ users ->
                 usersListPresenter.users.clear()
