@@ -9,7 +9,7 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.image.IImageL
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list.IUsersListPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.IUserItemView
 
-class UsersRVAdapter(val presenter: IUsersListPresenter, val imageLoader: IImageLoader<ImageView>  ) :
+class UsersRVAdapter(val presenter: IUsersListPresenter<UsersRVAdapter.ViewHolder>, val imageLoader: IImageLoader<ImageView>  ) :
     RecyclerView.Adapter<UsersRVAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =

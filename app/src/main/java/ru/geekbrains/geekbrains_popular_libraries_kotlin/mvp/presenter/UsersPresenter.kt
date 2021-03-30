@@ -20,7 +20,7 @@ class UsersPresenter(
 ) :
     MvpPresenter<UsersView>() {
 
-    class UsersListPresenter : IUsersListPresenter {
+    class UsersListPresenter : IUsersListPresenter<UsersRVAdapter.ViewHolder> {
         val users = mutableListOf<GithubUser>()
         override var itemClickListener: ((IUserItemView) -> Unit)? = null
 

@@ -7,7 +7,7 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.databinding.ItemUserRep
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list.IUserReposListPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.IUserRepoItemView
 
-class UserReposRVAdapter(val presenter: IUserReposListPresenter) :
+class UserReposRVAdapter(val presenter: IUserReposListPresenter<UserReposRVAdapter.ViewHolder>) :
     RecyclerView.Adapter<UserReposRVAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =

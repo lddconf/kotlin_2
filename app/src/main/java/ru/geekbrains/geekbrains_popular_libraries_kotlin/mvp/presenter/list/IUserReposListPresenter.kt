@@ -2,4 +2,4 @@ package ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list
 
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.IUserRepoItemView
 
-interface IUserReposListPresenter : IReposListPresenter<IUserRepoItemView>
+interface IUserReposListPresenter<ViewHolder> : IListPresenter<IUserRepoItemView, ViewHolder>

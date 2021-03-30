@@ -22,7 +22,7 @@ class UserReposPresenter(
 ) :
     MvpPresenter<UserReposView>() {
 
-    class UserReposListPresenter : IUserReposListPresenter {
+    class UserReposListPresenter : IUserReposListPresenter<UserReposRVAdapter.ViewHolder> {
         val repos = mutableListOf<GithubUserRepo>()
         override var itemClickListener: ((IUserRepoItemView) -> Unit)? = null
 
