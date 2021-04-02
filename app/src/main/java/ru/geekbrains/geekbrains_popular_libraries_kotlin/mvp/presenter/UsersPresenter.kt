@@ -27,7 +27,10 @@ class UsersPresenter(
         override fun bindView(view: UsersRVAdapter.ViewHolder) {
             val user = users[view.pos]
             view.setLogin(user.login)
-            view.loadAvatarUrl(user.avatarUrl)
+            user.avatarUrl?.let { avatarUrl ->
+                view.loadAvatarUrl(avatarUrl)
+            }
+
         }
 
         override fun getCount() = users.size
