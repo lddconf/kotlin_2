@@ -49,7 +49,7 @@ class UsersPresenter(
         }
     }
 
-    fun loadData() {
+    private fun loadData() {
         usersRepo.getUsers().observeOn(uiSchelduer)
             .subscribe({ users ->
                 usersListPresenter.users.clear()

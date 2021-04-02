@@ -9,7 +9,6 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.repo.IGithubU
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.navigation.IScreens
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list.IUserReposListPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UserReposView
-import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UsersView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.IUserRepoItemView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.adapter.UserReposRVAdapter
 
@@ -47,8 +46,8 @@ class UserReposPresenter(
     }
 
     fun loadData() {
-        githubUser?.let { user ->
-            userRepos.getUserRepos(user.login).observeOn(uiSchelduer)
+        githubUser?.reposUrl?.let { url ->
+            userRepos.getUserReposByURL(url).observeOn(uiSchelduer)
                 .subscribe({ users ->
                     userReposListPresenter.repos.clear()
                     userReposListPresenter.repos.addAll(users)

@@ -5,5 +5,6 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.Github
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUserRepo
 
 interface IGithubUserRepos {
-    fun getUserRepos(username : String): Single<List<GithubUserRepo>>
+    fun getUserReposByName(username : String): Single<List<GithubUserRepo>>
+    fun getUserReposByURL(url : String): Single<List<GithubUserRepo>>
 }

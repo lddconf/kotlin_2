@@ -9,6 +9,10 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.Github
 class RetrofitGithubUsersRepo(val api: IDataSource) : IGithubUsersRepo, IGithubUserRepos {
     override fun getUsers(): Single<List<GithubUser>> = api.getUsers().subscribeOn(Schedulers.io())
 
-    override fun getUserRepos(username: String): Single<List<GithubUserRepo>> =
-        api.getUserRepos(username).subscribeOn(Schedulers.io())
+    override fun getUserReposByName(username: String): Single<List<GithubUserRepo>> =
+        api.getUserReposByName(username).subscribeOn(Schedulers.io())
+
+    override fun getUserReposByURL(url: String): Single<List<GithubUserRepo>> =
+        api.getUserReposByUrl(url).subscribeOn(Schedulers.io())
+
 }
