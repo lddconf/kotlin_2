@@ -46,8 +46,8 @@ class UserReposPresenter(
     }
 
     fun loadData() {
-        githubUser?.reposUrl?.let { url ->
-            userRepos.getUserReposByURL(url).observeOn(uiSchelduer)
+        githubUser?.reposUrl?.let {
+            userRepos.getUserRepos(githubUser).observeOn(uiSchelduer)
                 .subscribe({ users ->
                     userReposListPresenter.repos.clear()
                     userReposListPresenter.repos.addAll(users)

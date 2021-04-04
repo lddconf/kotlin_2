@@ -1,7 +1,6 @@
 package ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.fragment
 
 import android.os.Bundle
-import android.os.Message
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -11,7 +10,8 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.databinding.FragmentUsersBinding
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.api.ApiHolder
-import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.repo.RetrofitGithubUsersRepo
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.room.db.Database
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.repo.RetrofitGithub
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.UsersPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UsersView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.App
@@ -19,6 +19,7 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.BackClickListener
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.adapter.UsersRVAdapter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.image.GlideImageLoader
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.navigation.AndroidScreens
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.network.AndroidNetworkStatus
 
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackClickListener {
 
@@ -28,7 +29,11 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackClickListener {
 
     private val presenter by moxyPresenter {
         UsersPresenter(
-            RetrofitGithubUsersRepo(ApiHolder.api),
+            RetrofitGithub(
+                ApiHolder.api,
+                AndroidNetworkStatus(App.instance),
+                Database.getInstance()
+            ),
             App.instance.router,
             AndroidScreens(),
             AndroidSchedulers.mainThread()
