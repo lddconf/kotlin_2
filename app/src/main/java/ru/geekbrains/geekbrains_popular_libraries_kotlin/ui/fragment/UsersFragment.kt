@@ -10,6 +10,7 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.databinding.FragmentUsersBinding
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.api.ApiHolder
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.cache.RoomGithubAvatarCache
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.cache.RoomGithubUsersCache
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.cache.RoomGithubReposCache
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.room.db.Database
@@ -61,7 +62,14 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackClickListener {
 
     override fun init() {
         vb?.rvUsers?.layoutManager = LinearLayoutManager(requireContext())
-        adapter = UsersRVAdapter(presenter.usersListPresenter, GlideImageLoader())
+        adapter = UsersRVAdapter(
+            presenter.usersListPresenter,
+            GlideImageLoader(
+                RoomGithubAvatarCache(
+                    Database.getInstance()
+                )
+            )
+        )
         vb?.rvUsers?.adapter = adapter
     }
 
