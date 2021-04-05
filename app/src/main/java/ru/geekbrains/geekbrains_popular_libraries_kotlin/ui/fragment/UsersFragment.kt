@@ -38,10 +38,10 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackClickListener {
                         RoomGithubUsersCache(Database.getInstance()),
                         RoomGithubReposCache(Database.getInstance())
                 ),
-                App.instance.router,
-                AndroidScreens(),
                 AndroidSchedulers.mainThread()
-        )
+        ).apply {
+            App.instance.appComponent.inject(this)
+        }
     }
 
     private var vb: FragmentUsersBinding? = null

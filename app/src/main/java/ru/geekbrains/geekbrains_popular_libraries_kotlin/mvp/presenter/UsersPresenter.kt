@@ -9,16 +9,20 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.navigation.IScreens
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list.IUsersListPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UsersView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.IUserItemView
-import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.adapter.UserReposRVAdapter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.adapter.UsersRVAdapter
+import javax.inject.Inject
 
 class UsersPresenter(
     val usersRepo: IGithubUsersRepo,
-    val router: Router,
-    val screens: IScreens,
     val uiSchelduer: Scheduler
 ) :
     MvpPresenter<UsersView>() {
+
+    @Inject
+    lateinit var screens: IScreens
+
+    @Inject
+    lateinit var router: Router
 
     class UsersListPresenter : IUsersListPresenter<UsersRVAdapter.ViewHolder> {
         val users = mutableListOf<GithubUser>()
