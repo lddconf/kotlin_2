@@ -13,5 +13,5 @@ interface UsersAvatarDao {
     fun insert(avatar: RoomGithubAvatar)
 
     @Query("SELECT * FROM RoomGithubAvatar WHERE avatarUrl=:avatarUrl LIMIT 1")
-    fun getAvatar(avatarUrl: String): RoomGithubAvatar
+    fun getAvatar(avatarUrl: String): RoomGithubAvatar?
 }
