@@ -32,15 +32,15 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackClickListener {
 
     private val presenter by moxyPresenter {
         UsersPresenter(
-            RetrofitGithub(
-                ApiHolder.api,
-                AndroidNetworkStatus(App.instance),
-                RoomGithubUsersCache(Database.getInstance()),
-                RoomGithubReposCache(Database.getInstance())
-            ),
-            App.instance.router,
-            AndroidScreens(),
-            AndroidSchedulers.mainThread()
+                RetrofitGithub(
+                        ApiHolder.api,
+                        AndroidNetworkStatus(App.instance),
+                        RoomGithubUsersCache(Database.getInstance()),
+                        RoomGithubReposCache(Database.getInstance())
+                ),
+                App.instance.router,
+                AndroidScreens(),
+                AndroidSchedulers.mainThread()
         )
     }
 
@@ -48,9 +48,9 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackClickListener {
     private var adapter: UsersRVAdapter? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = FragmentUsersBinding.inflate(inflater, container, false).also {
         vb = it
     }.root
@@ -63,12 +63,13 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackClickListener {
     override fun init() {
         vb?.rvUsers?.layoutManager = LinearLayoutManager(requireContext())
         adapter = UsersRVAdapter(
-            presenter.usersListPresenter,
-            GlideImageLoader(
-                RoomGithubAvatarCache(
-                    Database.getInstance()
+                presenter.usersListPresenter,
+                GlideImageLoader(
+                        RoomGithubAvatarCache(
+                                Database.getInstance()
+                        ),
+                        AndroidSchedulers.mainThread()
                 )
-            )
         )
         vb?.rvUsers?.adapter = adapter
     }

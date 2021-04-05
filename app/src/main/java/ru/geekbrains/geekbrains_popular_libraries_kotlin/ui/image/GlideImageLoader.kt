@@ -11,13 +11,15 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Scheduler
 import kotlinx.coroutines.*
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.cache.IAvatarCache
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.image.IImageLoader
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 
-class GlideImageLoader(val cache: IAvatarCache) : IImageLoader<ImageView> {
+class GlideImageLoader(val cache: IAvatarCache, val uiSchelduer: Scheduler) : IImageLoader<ImageView> {
     override fun load(url: String, container: ImageView) {
         Glide.with(container.context)
                 .load(url)
@@ -29,20 +31,19 @@ class GlideImageLoader(val cache: IAvatarCache) : IImageLoader<ImageView> {
                             target: Target<Drawable>?,
                             isFirstResource: Boolean
                     ): Boolean {
-                        var cachedAvatar: ByteArray? = null
-                        runBlocking(Dispatchers.IO) {
-                            cachedAvatar = cache.getAvatar(url)
-                        }
-                        cachedAvatar?.apply {
-                            if (isNotEmpty()) {
-                                val bitmap = BitmapFactory.decodeByteArray(this, 0, this.size)
-                                target?.let {
-                                    container.setImageBitmap(bitmap)
-                                    return true
+                        cache.getAvatar(url).observeOn(uiSchelduer).subscribe({ avatar ->
+                            avatar.apply {
+                                if (isNotEmpty()) {
+                                    val bitmap = BitmapFactory.decodeByteArray(this, 0, this.size)
+                                    target?.let {
+                                        container.setImageBitmap(bitmap)
+                                    }
                                 }
                             }
-                        }
-                        return false
+                        }, { error ->
+
+                        })
+                        return true
                     }
 
                     override fun onResourceReady(
@@ -57,15 +58,13 @@ class GlideImageLoader(val cache: IAvatarCache) : IImageLoader<ImageView> {
                             val bitmap = drawable.bitmap
                             val baos = ByteArrayOutputStream()
                             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
-                            runBlocking(Dispatchers.IO) {
-                                cache.putAvatar(url, baos.toByteArray())
-                            }
+                            cache.putAvatar(url, baos.toByteArray()).subscribe()
+
                         }
                         return false
                     }
                 })
                 .into(container)
-
     }
 }
 

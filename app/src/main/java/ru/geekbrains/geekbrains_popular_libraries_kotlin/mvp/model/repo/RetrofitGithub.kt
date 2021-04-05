@@ -25,9 +25,7 @@ class RetrofitGithub(
         networkStatus.isOnlineSingle().flatMap { isOnline ->
             if (isOnline) {
                 api.getUsers().flatMap { users ->
-                    usersCache.put(users).let {
-                        Single.fromCallable { users }
-                    }
+                    usersCache.put(users).toSingleDefault(users)
                 }
             } else {
                 usersCache.getAll()
@@ -39,9 +37,7 @@ class RetrofitGithub(
             if (isOnline) {
                 user.reposUrl?.let { url ->
                     api.getUserReposByUrl(url).flatMap { repos ->
-                        reposCache.put(user, repos).let {
-                            Single.fromCallable { repos }
-                        }
+                        reposCache.put(user, repos).toSingleDefault(repos)
                     }
                 } ?: Single.error<List<GithubUserRepo>>(RuntimeException("No user repos"))
             } else {
