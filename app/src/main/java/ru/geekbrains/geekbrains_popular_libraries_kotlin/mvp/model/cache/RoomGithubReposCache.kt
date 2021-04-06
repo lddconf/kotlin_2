@@ -9,6 +9,9 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.room.R
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.room.db.Database
 
 class RoomGithubReposCache(val db: Database) : IRepositoriesCache {
+
+
+
     override fun getAll(user: GithubUser): Single<List<GithubUserRepo>> = Single.fromCallable {
         val roomUser = db.userDao.findByLogin(user.login)
         db.repositoryDao.findForUser(roomUser.id).map { roomRepo ->

@@ -3,6 +3,7 @@ package ru.geekbrains.geekbrains_popular_libraries_kotlin.ui
 import android.app.Application
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.di.AppComponent
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.di.DaggerAppComponent
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.di.module.AppModule
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.room.db.Database
 
 class App : Application() {
@@ -16,9 +17,11 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        Database.create(this)
 
-        appComponent = DaggerAppComponent.builder().build()
+
+        appComponent = DaggerAppComponent.builder()
+                .appModule(AppModule(this))
+                .build()
 
         //appComponent.inject()
     }
