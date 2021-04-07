@@ -33,7 +33,9 @@ class UserReposFragment : MvpAppCompatFragment(), UserReposView, BackClickListen
         val githubUser =
                 arguments?.getParcelable<GithubUser>(UserReposFragment.EXTRA_KEY) as GithubUser
 
-        UserReposPresenter(githubUser).apply { App.instance.appComponent.inject(this) }
+        UserReposPresenter(githubUser).apply {
+            App.instance.initRepositorySubcomponent()?.inject(this)
+        }
     }
 
     private var vb: FragmentUsersBinding? = null

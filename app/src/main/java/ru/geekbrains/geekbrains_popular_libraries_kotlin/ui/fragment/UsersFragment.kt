@@ -24,7 +24,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackClickListener {
         UsersPresenter(
 
         ).apply {
-            App.instance.appComponent.inject(this)
+            App.instance.initUserSubcomponent().inject(this)
         }
     }
 

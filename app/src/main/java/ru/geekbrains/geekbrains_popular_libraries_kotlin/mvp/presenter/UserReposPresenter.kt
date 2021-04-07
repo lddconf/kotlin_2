@@ -3,6 +3,7 @@ package ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter
 import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.di.repository.IRepositoryScopeContainer
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUser
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUserRepo
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.repo.IGithubUserRepos
@@ -17,6 +18,9 @@ import javax.inject.Named
 class UserReposPresenter(
     val githubUser: GithubUser?) :
     MvpPresenter<UserReposView>() {
+
+    @Inject
+    lateinit var repositoryScopeContainer : IRepositoryScopeContainer
 
     @Inject
     @field:Named("UIThread")
@@ -74,5 +78,10 @@ class UserReposPresenter(
     fun backClick(): Boolean {
         router.exit()
         return true
+    }
+
+    override fun onDestroy() {
+        repositoryScopeContainer.releaseRepositoryScope()
+        super.onDestroy()
     }
 }

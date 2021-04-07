@@ -14,34 +14,21 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.room.d
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.network.INetworkStatus
 import java.lang.RuntimeException
 
-class RetrofitGithub(
-    val api: IDataSource,
-    val networkStatus: INetworkStatus,
-    val usersCache: IUsersCache,
-    val reposCache: IRepositoriesCache
-) : IGithubUsersRepo, IGithubUserRepos {
-
-    override fun getUsers(): Single<List<GithubUser>> =
-        networkStatus.isOnlineSingle().flatMap { isOnline ->
-            if (isOnline) {
-                api.getUsers().flatMap { users ->
-                    usersCache.put(users).toSingleDefault(users)
-                }
-            } else {
-                usersCache.getAll()
-            }
-        }.subscribeOn(Schedulers.io())
-
+class RetrofitGithubUserRepos(
+        val api: IDataSource,
+        val networkStatus: INetworkStatus,
+        val reposCache: IRepositoriesCache
+) : IGithubUserRepos {
     override fun getUserRepos(user: GithubUser): Single<List<GithubUserRepo>> =
-        networkStatus.isOnlineSingle().flatMap { isOnline ->
-            if (isOnline) {
-                user.reposUrl?.let { url ->
-                    api.getUserReposByUrl(url).flatMap { repos ->
-                        reposCache.put(user, repos).toSingleDefault(repos)
-                    }
-                } ?: Single.error<List<GithubUserRepo>>(RuntimeException("No user repos"))
-            } else {
-                reposCache.getAll(user)
-            }
-        }.subscribeOn(Schedulers.io())
+            networkStatus.isOnlineSingle().flatMap { isOnline ->
+                if (isOnline) {
+                    user.reposUrl?.let { url ->
+                        api.getUserReposByUrl(url).flatMap { repos ->
+                            reposCache.put(user, repos).toSingleDefault(repos)
+                        }
+                    } ?: Single.error(RuntimeException("No user repos"))
+                } else {
+                    reposCache.getAll(user)
+                }
+            }.subscribeOn(Schedulers.io())
 }
