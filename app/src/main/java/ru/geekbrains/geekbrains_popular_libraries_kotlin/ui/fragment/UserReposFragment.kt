@@ -10,21 +10,25 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.databinding.FragmentUsersBinding
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.api.ApiHolder
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.cache.RoomGithubUsersCache
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.cache.RoomGithubReposCache
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.GithubUser
-import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.repo.RetrofitGithubUsersRepo
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.entity.room.db.Database
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.repo.RetrofitGithub
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.UserReposPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UserReposView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.App
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.BackClickListener
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.adapter.UserReposRVAdapter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.navigation.AndroidScreens
+import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.network.AndroidNetworkStatus
 
 class UserReposFragment : MvpAppCompatFragment(), UserReposView, BackClickListener {
 
     companion object {
         private const val EXTRA_KEY = "UserReposFragment.GithubUser"
 
-        fun newInstance(githubUser: GithubUser) : UserReposFragment {
+        fun newInstance(githubUser: GithubUser): UserReposFragment {
             val bundle = Bundle()
             bundle.putParcelable(UserReposFragment.EXTRA_KEY, githubUser)
             val userReposFragment = UserReposFragment()
@@ -34,11 +38,17 @@ class UserReposFragment : MvpAppCompatFragment(), UserReposView, BackClickListen
     }
 
     private val presenter by moxyPresenter {
-        val githubUser = arguments?.getParcelable<GithubUser>(UserReposFragment.EXTRA_KEY) as GithubUser
+        val githubUser =
+            arguments?.getParcelable<GithubUser>(UserReposFragment.EXTRA_KEY) as GithubUser
 
         UserReposPresenter(
             githubUser,
-            RetrofitGithubUsersRepo(ApiHolder.api),
+            RetrofitGithub(
+                ApiHolder.api,
+                AndroidNetworkStatus(App.instance),
+                RoomGithubUsersCache(Database.getInstance()),
+                RoomGithubReposCache(Database.getInstance())
+            ),
             App.instance.router,
             AndroidScreens(),
             AndroidSchedulers.mainThread()
