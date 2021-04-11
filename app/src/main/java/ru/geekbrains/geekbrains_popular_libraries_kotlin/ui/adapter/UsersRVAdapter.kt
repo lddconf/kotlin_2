@@ -8,9 +8,13 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.databinding.ItemUserBin
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.model.image.IImageLoader
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list.IUsersListPresenter
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.IUserItemView
+import javax.inject.Inject
 
-class UsersRVAdapter(val presenter: IUsersListPresenter<UsersRVAdapter.ViewHolder>, val imageLoader: IImageLoader<ImageView>) :
+class UsersRVAdapter(val presenter: IUsersListPresenter<UsersRVAdapter.ViewHolder>) :
         RecyclerView.Adapter<UsersRVAdapter.ViewHolder>() {
+
+    @Inject
+    lateinit var imageLoader: IImageLoader<ImageView>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(

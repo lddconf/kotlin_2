@@ -11,15 +11,26 @@ import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.presenter.list.IUse
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.UserReposView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.mvp.view.list.IUserRepoItemView
 import ru.geekbrains.geekbrains_popular_libraries_kotlin.ui.adapter.UserReposRVAdapter
+import javax.inject.Inject
+import javax.inject.Named
 
 class UserReposPresenter(
-    val githubUser: GithubUser?,
-    val userRepos: IGithubUserRepos,
-    val router: Router,
-    val screens: IScreens,
-    val uiSchelduer: Scheduler
-) :
+    val githubUser: GithubUser?) :
     MvpPresenter<UserReposView>() {
+
+    @Inject
+    @field:Named("UIThread")
+    lateinit var uiSchelduer: Scheduler
+
+
+    @Inject
+    lateinit var userRepos: IGithubUserRepos
+
+    @Inject
+    lateinit var router: Router
+
+    @Inject
+    lateinit var screens: IScreens
 
     class UserReposListPresenter : IUserReposListPresenter<UserReposRVAdapter.ViewHolder> {
         val repos = mutableListOf<GithubUserRepo>()

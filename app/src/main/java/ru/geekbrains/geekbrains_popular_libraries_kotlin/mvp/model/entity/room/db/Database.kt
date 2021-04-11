@@ -26,6 +26,7 @@ abstract class Database : RoomDatabase() {
 
     companion object {
         private const val DB_NAME = "database.db"
+
         private var instance: Database? = null
 
         fun create(context: Context) {
